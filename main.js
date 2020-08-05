@@ -13,7 +13,8 @@ const fetchUser = () => {
   })
   .then(data => {
     if(usersArr.length == 5){
-    displayNamePhoto();
+      usersArr.sort((a, b) => a.results[0].name.last - b.results[0].name.last);
+      displayNamePhoto();
     }
   })
   }
@@ -21,19 +22,48 @@ const fetchUser = () => {
 
 const displayNamePhoto = () => {
   const contactsList = document.getElementById('contacts-list');
+  let index = 0;
     usersArr.forEach(user => {
+      index ++;
+      
       const li = document.createElement('li');
+      li.id = index;
+      
+      const li1 = document.createElement('li');
+      li1.id = "contact" + index;
+      
       const img = document.createElement('img');
+      img.name = index;
+      img.id = index;
+      
       const button = document.createElement('button');
+      button.type = "button";
+      button.name = index;
+      button.id = index;
+      button.setAttribute("onClick", "displayMoreInfo(this.id)");
+      
       li.innerHTML = `${user.results[0].name.first} ${user.results[0].name.last}`;
+      
+      li1.innerHTML = `${user.results[0].location.street.number} ${user.results[0].location.street.name}, ${user.results[0].location.city}, ${user.results[0].location.state} ${user.results[0].location.postcode}`;
+      li1.style.display = "none";
+      
       img.src = `${user.results[0].picture.thumbnail}`;
+      
       button.innerHTML = 'Display More Info';
-      button.addEventListener("click", displayMoreInfo);
+      
       contactsList.append(li, img, button);
+      li.append(li1);
+      //button.addEventListener("click", displayMoreInfo(this.id));
     })
 }
 
-const displayMoreInfo = () => {
-  const contactsList = document.getElementById('contacts-list');
-    usersArr.find()
+const displayMoreInfo = (id) => {
+  const item = document.getElementById("contact" + id);
+  if (item.style.display === "none") {
+    item.style.display = "block";
+  } else {
+    item.style.display = "none";
+  }
 }
+
+// possibly use the button to hide and unhide a section
